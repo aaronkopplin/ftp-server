@@ -5,7 +5,7 @@ PORT = 9999
 FILEPATH = "client_files/"
 
 messenger = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-messenger.connect((LOCALHOST,PORT))
+messenger.connect((LOCALHOST, PORT))
 
 
 def default():
@@ -39,6 +39,8 @@ while True:
             retrieve(fname)
         elif command == "quit":
             break
+        elif command == "list":
+            print(messenger.recv(1024).decode())
         else:
             default()
     else:
