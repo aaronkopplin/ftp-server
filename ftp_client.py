@@ -36,10 +36,6 @@ def store(filename=None):
 
 
 while True:
-
-    # TODO: Remove this !!!!!!!!!!!!!!!!!!
-    if messenger is None:
-        connect("localhost", 9999)
     chat = input("message: ")
     if chat:
         c = False
