@@ -3,9 +3,18 @@ import socket
 LOCALHOST = "localhost"
 PORT = 9999
 FILEPATH = "client_files/"
+messenger = None
 
-messenger = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-messenger.connect((LOCALHOST, PORT))
+
+def connect(ip, port):
+    global messenger
+    try:
+        messenger = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        messenger.connect((ip, int(port)))
+        print("Successfully connected to " + ip + ":" + str(port))
+    except socket.error:
+        print("Error connecting to server. Please try again.")
+        messenger = None
 
 
 def default():
@@ -22,11 +31,9 @@ def retrieve(filename=None):
 while True:
     chat = input("message: ")
     if chat:
-        messenger.sendall(chat.encode())
-
         c = False
         f = False
-        parsed_message = chat.split(" ")
+        parsed_message = chat.strip().split(" ")
 
         if len(parsed_message) >= 1:
             command = parsed_message[0]
@@ -35,9 +42,22 @@ while True:
             fname = parsed_message[1]
             f = True
 
+        # Continue looping if the client is not connected to server
+        if messenger is None:
+            connect_cmd = command == "connect"
+            if not connect_cmd or (connect_cmd and len(parsed_message) != 3):
+                print("Client not connected. Enter connect <ip> <port #>.")
+                continue
+            if connect_cmd and len(parsed_message) == 3:
+                connect(parsed_message[1], parsed_message[2])
+                continue
+
+        messenger.sendall(chat.encode())
+
         if command == "retrieve" and f:
             retrieve(fname)
         elif command == "quit":
+            messenger.close()
             break
         elif command == "list":
             print(messenger.recv(1024).decode())
@@ -45,5 +65,3 @@ while True:
             default()
     else:
         default()
-
-messenger.close()  # close the socket

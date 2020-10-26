@@ -14,6 +14,7 @@ messenger, address = sock.accept() # messenger is a socket
 def default():
     print("Command not recognized")
 
+
 def list_files():
 
     # Check if stored_files folder exists
