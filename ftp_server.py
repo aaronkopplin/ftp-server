@@ -1,4 +1,5 @@
 import socket
+import os
 
 LOCALHOST = "localhost"
 PORT = 9999
@@ -12,6 +13,16 @@ messenger, address = sock.accept() # messenger is a socket
 
 def default():
     print("Command not recognized")
+
+def list_files():
+    output = ""
+    files = os.listdir(os.getcwd())
+    if len(files) == 0:
+        output = "No files found."
+    else:
+        for file in os.listdir(os.getcwd()):
+            output += file + "\n"
+    return output
 
 
 def retrieve(filename=None):
@@ -39,6 +50,8 @@ while True:
 
         if command == "retrieve" and f:
             retrieve(fname)
+        elif command == "list":
+            messenger.sendall(list_files().encode())
         elif command == "quit":
             break
         else:
