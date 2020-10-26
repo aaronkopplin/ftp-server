@@ -28,7 +28,18 @@ def retrieve(filename=None):
         file.write(data.decode("utf-8"))
 
 
+def store(filename=None):
+    file = open(FILEPATH+filename, 'r')
+    data = file.read()
+    if data:
+        messenger.sendall(data.encode())
+
+
 while True:
+
+    # TODO: Remove this !!!!!!!!!!!!!!!!!!
+    if messenger is None:
+        connect("localhost", 9999)
     chat = input("message: ")
     if chat:
         c = False
@@ -56,6 +67,8 @@ while True:
 
         if command == "retrieve" and f:
             retrieve(fname)
+        elif command == "store" and f:
+            store(fname)
         elif command == "quit":
             messenger.close()
             break

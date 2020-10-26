@@ -7,8 +7,8 @@ FILEPATH = "stored_files/"
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.bind((LOCALHOST, PORT))
-sock.listen() # wait for someone to start the client script
-messenger, address = sock.accept() # messenger is a socket
+sock.listen()  # wait for someone to start the client script
+messenger, address = sock.accept()  # messenger is a socket
 
 
 def default():
@@ -39,6 +39,13 @@ def retrieve(filename=None):
         messenger.sendall(data.encode())
 
 
+def store(filename=None):
+    file = open(FILEPATH+filename, 'w')
+    data = messenger.recv(10000000)
+    if data:
+        file.write(data.decode("utf-8"))
+
+
 while True:
     received_message = messenger.recv(1024)
     if received_message:
@@ -56,6 +63,8 @@ while True:
 
         if command == "retrieve" and f:
             retrieve(fname)
+        elif command == "store" and f:
+            store(fname)
         elif command == "list":
             messenger.sendall(list_files().encode())
         elif command == "quit":
@@ -65,7 +74,7 @@ while True:
     else:
         default()
 
-messenger.close() # close the socket
+messenger.close()  # close the socket
 
 
 
