@@ -16,10 +16,9 @@ def default():
 
 def retrieve(filename=None):
     file = open(FILEPATH+filename, 'r')
-    data = file.read(1024)
-    while data:
+    data = file.read()
+    if data:
         messenger.sendall(data.encode())
-        data = file.read(1024)
 
 
 while True:

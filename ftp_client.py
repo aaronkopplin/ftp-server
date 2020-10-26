@@ -14,11 +14,9 @@ def default():
 
 def retrieve(filename=None):
     file = open(FILEPATH+filename, 'w')
-    data = messenger.recv(1024)
-    while data:
-        print(data)
+    data = messenger.recv(10000000)
+    if data:
         file.write(data.decode("utf-8"))
-        data = messenger.recv(1024)
 
 
 while True:
