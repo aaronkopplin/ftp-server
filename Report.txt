@@ -1,0 +1,3 @@
+When first creating the server and client classes, we experienced issues with synchronizing connections. We found that when you kill a script that has opened a connection, it fails to properly close the connection. This resulted in an issue where we could not reconnect to the same port without first closing and reopening the terminal from which the script was originally run. 
+
+After testing establishing connections, we tested the connection by sending text strings from the client to the server. The socket expects bytes, and we learned that the strings had to be encoded and decoded from bytes when being sent over the TCP connection. 
